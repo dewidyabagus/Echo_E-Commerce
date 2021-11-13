@@ -21,6 +21,11 @@ import (
 	userService "RESTful/business/user"
 	userRepository "RESTful/modules/user"
 
+	// Admin
+	adminController "RESTful/api/v1/admin"
+	adminService "RESTful/business/admin"
+	adminRepository "RESTful/modules/admin"
+
 	// Auth
 	authController "RESTful/api/v1/auth"
 	authService "RESTful/business/auth"
@@ -49,26 +54,37 @@ func main() {
 	// Create new session database
 	dbConnection := newDatabaseConnection(config)
 
+	// ========= ADMIN ========= //
+	// Initiate admin repository
+	adminRepo := adminRepository.NewRepository(dbConnection)
+	// Initiate admin service
+	adminSvc := adminService.NewService(adminRepo)
+	// Initiate admin controller
+	adminCtr := adminController.NewController(adminSvc)
+
+	// ========= USER ========= //
 	// Initiate user repository
 	userRepo := userRepository.NewRepository(dbConnection)
-
 	// Initiate user service
-	userSvc := userService.NewService(userRepo)
-
+	userSvc := userService.NewService(userRepo, adminSvc)
 	// Initiate user controller
 	userCtr := userController.NewController(userSvc)
 
+	// ========= AIM ========= //
 	// Initiate auth user
-	authSvc := authService.NewService(userSvc)
-
+	authSvc := authService.NewService(userSvc, adminSvc)
 	// Initiate auth controller
 	authCtr := authController.NewController(authSvc)
 
 	// Initiate echo web framework
 	e := echo.New()
 
-	// Initiate routes
-	api.RegisterRouters(e, userCtr, authCtr)
+	// Initiate routes && userCtr, authCtr, adminCtr
+	api.RegisterRouters(e, &api.Routing{
+		User:  userCtr,
+		Auth:  authCtr,
+		Admin: adminCtr,
+	})
 
 	// start echo
 	e.Start(":8000")
