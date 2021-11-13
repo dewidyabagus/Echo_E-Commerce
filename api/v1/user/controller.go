@@ -1,15 +1,13 @@
 package user
 
 import (
+	echo "github.com/labstack/echo/v4"
+
 	"RESTful/api/common"
 	"RESTful/api/middleware"
-
 	"RESTful/api/v1/user/request"
 	"RESTful/api/v1/user/response"
-
 	"RESTful/business/user"
-
-	echo "github.com/labstack/echo/v4"
 )
 
 type Controller struct {
@@ -29,7 +27,12 @@ func (c *Controller) AddNewUser(ctx echo.Context) error {
 		return ctx.JSON(common.BadRequestResponse())
 	}
 
-	err = c.service.AddNewUser(user.ToUserAddSpec())
+	id, err := middleware.ExtractJWTUserId(ctx)
+	if err != nil {
+		return ctx.JSON(common.NewBusinessErrorResponse(err))
+	}
+
+	err = c.service.AddNewUser(user.ToUserAddSpec(), &id)
 	if err != nil {
 		return ctx.JSON(common.NewBusinessErrorResponse(err))
 	}

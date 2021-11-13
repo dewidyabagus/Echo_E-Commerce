@@ -8,13 +8,13 @@ type Service interface {
 	GetUserWithEmailPassword(email *string, password *string) (id *string, err error)
 
 	// Add new user
-	AddNewUser(user *UserAddSpec) error
+	AddNewUser(user *UserAddSpec, addter *string) error
 
 	// Update user by id
-	// UpdateUser(id *string, user *User) error
+	// UpdateUser(id *string, user *User, modifier *string) error
 
 	// Delete user by id
-	// DeleteUser(id *string) error
+	// DeleteUser(id *string, deleter *string) error
 }
 
 type Repository interface {

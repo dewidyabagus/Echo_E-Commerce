@@ -19,7 +19,7 @@ type User struct {
 	OutletId  string    `gorm:"outlet_id;type:uuid;not null"`
 	CreatedAt time.Time `gorm:"created_at;type:timestamp;not null"`
 	UpdatedAt time.Time `gorm:"updated_at;type:timestamp;not null"`
-	DeletedAt time.Time `gorm:"deleted_at;type:timestamp"`
+	DeletedAt time.Time `gorm:"index"`
 }
 
 func (u *User) toBusinessUser() *user.User {
@@ -39,6 +39,10 @@ type UserLogin struct {
 	ID string `gorm:"id"`
 }
 
+type Repository struct {
+	DB *gorm.DB
+}
+
 func toUserInsert(u *user.User) *User {
 	return &User{
 		ID:        u.ID,
@@ -50,10 +54,6 @@ func toUserInsert(u *user.User) *User {
 		CreatedAt: u.CreatedAt,
 		UpdatedAt: u.UpdatedAt,
 	}
-}
-
-type Repository struct {
-	DB *gorm.DB
 }
 
 func NewRepository(db *gorm.DB) *Repository {
