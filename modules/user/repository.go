@@ -16,10 +16,11 @@ type User struct {
 	FirstName string    `gorm:"first_name;type:varchar(100);not null"`
 	LastName  string    `gorm:"last_name;type:varchar(100);not null"`
 	Password  string    `gorm:"password;type:varchar(32);not null"`
-	OutletId  string    `gorm:"outlet_id;type:uuid;not null"`
+	OutletId  string    `gorm:"outlet_id;type:uuid;index:users_outlet_id_idx;not null"`
 	CreatedAt time.Time `gorm:"created_at;type:timestamp;not null"`
 	UpdatedAt time.Time `gorm:"updated_at;type:timestamp;not null"`
-	DeletedAt time.Time `gorm:"index"`
+	Deleted   bool      `gorm:"deleted;type:boolean;default:false"`
+	DeletedAt time.Time `gorm:"deleted_at;type:timestamp"`
 }
 
 func (u *User) toBusinessUser() *user.User {
@@ -56,28 +57,39 @@ func toUserInsert(u *user.User) *User {
 	}
 }
 
+func toUpdateUser(u *user.User) *User {
+	return &User{
+		Email:     u.Email,
+		FirstName: u.FirstName,
+		LastName:  u.LastName,
+		Password:  u.Password,
+		OutletId:  u.OutletId,
+		UpdatedAt: u.UpdatedAt,
+	}
+}
+
+func toAllBusinessUser(users *[]User) *[]user.User {
+	var response = []user.User{}
+
+	for _, user := range *users {
+		response = append(response, *user.toBusinessUser())
+	}
+
+	return &response
+}
+
 func NewRepository(db *gorm.DB) *Repository {
 	return &Repository{db}
 }
 
 func (r *Repository) AddNewUser(user *user.User) error {
-	testUser := new(User)
-
-	err := r.DB.First(testUser, "email = ?", user.Email).Error
-	if !errors.Is(err, gorm.ErrRecordNotFound) {
-		if err != nil {
-			return err
-		}
-		return business.ErrDataConflict
-	}
-
 	return r.DB.Create(toUserInsert(user)).Error
 }
 
 func (r *Repository) GetUserWithEmailPassword(email *string, password *string) (id *string, err error) {
 	var login = new(UserLogin)
 
-	err = r.DB.Model(&User{}).First(login, "email = ? and password = md5(?)", email, password).Error
+	err = r.DB.Model(&User{}).First(login, "deleted = false and email = ? and password = md5(?)", email, password).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return id, business.ErrUnauthorized
@@ -88,12 +100,45 @@ func (r *Repository) GetUserWithEmailPassword(email *string, password *string) (
 	return &login.ID, nil
 }
 
+func (r *Repository) VerifyUserEmail(email *string) (id *string, err error) {
+	verify := new(UserLogin)
+
+	err = r.DB.Model(&User{}).First(verify, "deleted = false and email = ?", email).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, business.ErrDataNotFound
+		}
+		return nil, err
+	}
+
+	return &verify.ID, nil
+}
+
+func (r *Repository) FindAllUser() (*[]user.User, error) {
+	var users = new([]User)
+
+	err := r.DB.Where("deleted = false").Find(users).Order("outlet_id asc").Error
+	if err != nil {
+		return nil, err
+	}
+
+	return toAllBusinessUser(users), nil
+}
+
 func (r *Repository) FindUserByUserId(id *string) (*user.User, error) {
 	var user = new(User)
 
-	if err := r.DB.First(user, "id = ?", id).Error; err != nil {
+	if err := r.DB.First(user, "deleted = false and id = ?", id).Error; err != nil {
 		return nil, err
 	}
 
 	return user.toBusinessUser(), nil
+}
+
+func (r *Repository) UpdateUser(id *string, user *user.User) error {
+	return r.DB.Model(&User{}).Where("id = ?", id).Updates(toUpdateUser(user)).Error
+}
+
+func (r *Repository) DeleteUser(id *string, deletedAt time.Time) error {
+	return r.DB.Model(&User{}).Where("id = ?", id).Updates(&User{Deleted: true, DeletedAt: deletedAt}).Error
 }

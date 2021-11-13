@@ -41,3 +41,20 @@ func (u *UserAddSpec) toInsertUser() *User {
 		UpdatedAt: time.Now(),
 	}
 }
+
+type UserEditSpec struct {
+	Email     string `validate:"required,email"`
+	FirstName string `validate:"required"`
+	LastName  string `validate:"required"`
+	OutletId  string `validate:"required"`
+}
+
+func (u *UserEditSpec) toUpdateUser() *User {
+	return &User{
+		Email:     u.Email,
+		FirstName: u.FirstName,
+		LastName:  u.LastName,
+		OutletId:  u.OutletId,
+		UpdatedAt: time.Now(),
+	}
+}

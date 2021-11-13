@@ -19,3 +19,12 @@ func (r *RequestUser) ToUserAddSpec() *user.UserAddSpec {
 		Password:  r.Password,
 	}
 }
+
+func (r *RequestUser) ToUserUpateSpec() *user.UserEditSpec {
+	return &user.UserEditSpec{
+		Email:     r.Email,
+		FirstName: r.FirstName,
+		LastName:  r.LastName,
+		OutletId:  r.OutletId,
+	}
+}

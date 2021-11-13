@@ -25,13 +25,15 @@ func RegisterRouters(e *echo.Echo, routing *Routing) {
 	authGroup.POST("/users", auth.LoginUserWithEmailPassword)
 	authGroup.POST("/admins", auth.LoginAdminWithEmailPassword)
 
-	// Register Admin Trial
+	// Register Admin
 	e.POST("/v1/admins/register", admin.AddNewAdmin)
 
 	// User Information Changes
 	userGroup := e.Group("/v1/users")
 	userGroup.Use(middleware.JWTMiddleware())
+	userGroup.GET("", user.FindAllUser)
 	userGroup.POST("/register", user.AddNewUser)
-
-	// userGroup.GET("", user.FindUserByUserId)
+	userGroup.GET("/:id", user.FindUserByUserId)
+	userGroup.PUT("/:id", user.UpdateUser)
+	userGroup.DELETE("/:id", user.DeleteUser)
 }
