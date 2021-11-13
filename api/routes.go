@@ -1,24 +1,36 @@
 package api
 
 import (
+	echo "github.com/labstack/echo/v4"
+
+	"RESTful/api/middleware"
+	"RESTful/api/v1/admin"
 	"RESTful/api/v1/auth"
 	"RESTful/api/v1/user"
-
-	echo "github.com/labstack/echo/v4"
 )
 
-func RegisterRouters(e *echo.Echo, user *user.Controller, auth *auth.Controller) {
+type Routing struct {
+	User  *user.Controller
+	Auth  *auth.Controller
+	Admin *admin.Controller
+}
 
-	if user == nil || auth == nil {
-		panic("Error Initiate Routes")
-	}
+func RegisterRouters(e *echo.Echo, routing *Routing) {
+	user := routing.User
+	auth := routing.Auth
+	admin := routing.Admin
 
-	// Register and Login User
-	e.POST("/login", auth.LoginUserWithEmailPassword)
+	// IAM service
+	authGroup := e.Group("/v1/auth")
+	authGroup.POST("/users", auth.LoginUserWithEmailPassword)
+	authGroup.POST("/admins", auth.LoginAdminWithEmailPassword)
+
+	// Register Admin Trial
+	e.POST("/v1/admins/register", admin.AddNewAdmin)
 
 	// User Information Changes
 	userGroup := e.Group("/v1/users")
-	// userGroup.Use(middleware.JWTMiddleware())
+	userGroup.Use(middleware.JWTMiddleware())
 	userGroup.POST("/register", user.AddNewUser)
 
 	// userGroup.GET("", user.FindUserByUserId)
