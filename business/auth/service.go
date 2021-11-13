@@ -6,17 +6,19 @@ import (
 	"github.com/golang-jwt/jwt"
 
 	"RESTful/business"
+	"RESTful/business/admin"
 	"RESTful/business/user"
 	"RESTful/config"
 	"RESTful/utils/validator"
 )
 
 type service struct {
-	userService user.Service
+	userService  user.Service
+	adminService admin.Service
 }
 
-func NewService(userService user.Service) Service {
-	return &service{userService}
+func NewService(userService user.Service, adminService admin.Service) Service {
+	return &service{userService, adminService}
 }
 
 func (s *service) UserLoginWithEmailPassword(user *LoginSpec) (token *string, err error) {
@@ -27,18 +29,27 @@ func (s *service) UserLoginWithEmailPassword(user *LoginSpec) (token *string, er
 
 	id, err := s.userService.GetUserWithEmailPassword(&user.Email, &user.Password)
 	if err != nil {
-		return token, err
+		return nil, err
 	}
 
-	genToken, err := createToken(id)
+	return createToken(id)
+}
+
+func (s *service) AdminLoginWithEmailPassword(user *LoginSpec) (token *string, err error) {
+	err = validator.GetValidator().Struct(user)
+	if err != nil {
+		return nil, business.ErrUnauthorized
+	}
+
+	id, err := s.adminService.GetAdminWithEmailPassword(&user.Email, &user.Password)
 	if err != nil {
 		return token, err
 	}
 
-	return &genToken, nil
+	return createToken(id)
 }
 
-func createToken(id *string) (token string, err error) {
+func createToken(id *string) (*string, error) {
 	eJWT := jwt.NewWithClaims(
 		jwt.SigningMethodHS256,
 		jwt.MapClaims{
@@ -47,10 +58,10 @@ func createToken(id *string) (token string, err error) {
 		},
 	)
 
-	token, err = eJWT.SignedString([]byte(config.GetJWTSecretKey()))
+	token, err := eJWT.SignedString([]byte(config.GetJWTSecretKey()))
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
-	return token, err
+	return &token, err
 }
