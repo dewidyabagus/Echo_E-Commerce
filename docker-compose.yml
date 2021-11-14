@@ -11,3 +11,20 @@ services:
       - POSTGRES_PASSWORD=yourpassword
       - POSTGRES_DB=ecommercedb
     restart: on-failure
+    networks:
+      - local_network
+
+  webservice:
+    container_name: webservice
+    build: .
+    ports:
+      - 8000:8000
+    restart: on-failure
+    networks:
+      - local_network
+    depends_on:
+      - database
+    
+networks:
+  local_network:
+    name: local_network
