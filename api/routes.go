@@ -6,19 +6,22 @@ import (
 	"RESTful/api/middleware"
 	"RESTful/api/v1/admin"
 	"RESTful/api/v1/auth"
+	"RESTful/api/v1/product"
 	"RESTful/api/v1/user"
 )
 
 type Routing struct {
-	User  *user.Controller
-	Auth  *auth.Controller
-	Admin *admin.Controller
+	User    *user.Controller
+	Auth    *auth.Controller
+	Admin   *admin.Controller
+	Product *product.Controller
 }
 
 func RegisterRouters(e *echo.Echo, routing *Routing) {
 	user := routing.User
 	auth := routing.Auth
 	admin := routing.Admin
+	product := routing.Product
 
 	// IAM service
 	authGroup := e.Group("/v1/auth")
@@ -36,4 +39,10 @@ func RegisterRouters(e *echo.Echo, routing *Routing) {
 	userGroup.GET("/:id", user.FindUserByUserId)
 	userGroup.PUT("/:id", user.UpdateUser)
 	userGroup.DELETE("/:id", user.DeleteUser)
+
+	// Product
+	productGroup := e.Group("/v1/products")
+	productGroup.Use(middleware.JWTMiddleware())
+	productGroup.GET("", product.FindAllProduct)
+	productGroup.POST("", product.AddNewProduct)
 }
