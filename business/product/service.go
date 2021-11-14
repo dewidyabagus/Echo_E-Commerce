@@ -1,6 +1,8 @@
 package product
 
 import (
+	"time"
+
 	"RESTful/business"
 	"RESTful/business/user"
 	"RESTful/utils/validator"
@@ -46,22 +48,51 @@ func (s *service) FindAllProduct(requester *string) (*[]Product, error) {
 }
 
 // Get product detail by id
-// func (s *service) FindProductById(id, requester *string) (*Product, error) {
-// 	if _, err := s.userService.GetUserByIdFromService(requester); err != nil {
-// 		return nil, business.ErrUnauthorized
-// 	}
-// }
+func (s *service) FindProductById(id, requester *string) (*Product, error) {
+	if _, err := s.userService.GetUserByIdFromService(requester); err != nil {
+		return nil, business.ErrUnauthorized
+	}
+
+	return s.repository.FindProductById(id)
+}
 
 // Modify Information Product
-// func (s *service) UpdateProduct(id *string, product *ProductSpec, modifier *string) error {
-// 	if _, err := s.userService.GetUserByIdFromService(modifier); err != nil {
-// 		return nil
-// 	}
-// }
+func (s *service) UpdateProduct(id *string, product *ProductSpec, modifier *string) error {
+	mapUser, err := s.userService.GetUserByIdFromService(modifier)
+	if err != nil {
+		return business.ErrUnauthorized
+	}
+	merchant_id, _ := mapUser["merchant_id"].(string)
+
+	if err := validator.GetValidator().Struct(product); err != nil {
+		return business.ErrDataNotSpec
+	}
+
+	if _, err := s.repository.FindProductById(id); err != nil {
+		return err
+	}
+
+	producId, err := s.repository.FindProductBySKU(&merchant_id, &product.SKU)
+	if err == nil {
+		if *id != *producId {
+			return business.ErrDataConflict
+		}
+	} else if err != business.ErrDataNotFound {
+		return err
+	}
+
+	return s.repository.UpdateProduct(id, product.toUpdateProduct())
+}
 
 // Delete product
-// func (s *service) DeleteProduct(id, deleter *string) error {
-// 	if _, err := s.userService.GetUserByIdFromService(deleter); err != nil {
-// 		return err
-// 	}
-// }
+func (s *service) DeleteProduct(id, deleter *string) error {
+	if _, err := s.userService.GetUserByIdFromService(deleter); err != nil {
+		return business.ErrUnauthorized
+	}
+
+	if _, err := s.repository.FindProductById(id); err != nil {
+		return err
+	}
+
+	return s.repository.DeleteProduct(id, time.Now())
+}

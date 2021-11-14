@@ -1,10 +1,12 @@
 package product
 
 import (
+	"errors"
 	"time"
 
 	"gorm.io/gorm"
 
+	"RESTful/business"
 	"RESTful/business/product"
 )
 
@@ -89,6 +91,9 @@ func (r *Repository) FindProductBySKU(merchant_id, sku *string) (id *string, err
 	err = r.DB.Model(&Product{}).
 		First(productId, "deleted = false and merchant_id = ? and sku = ?", merchant_id, sku).Error
 	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, business.ErrDataNotFound
+		}
 		return nil, err
 	}
 
@@ -106,4 +111,29 @@ func (r *Repository) FindAllProduct(merchant_id *string) (*[]product.Product, er
 	}
 
 	return toAllBusinessProduct(products), nil
+}
+
+func (r *Repository) FindProductById(id *string) (*product.Product, error) {
+	var product = new(Product)
+
+	if err := r.DB.First(product, "deleted = false and id = ?", id).Error; err != nil {
+		return nil, err
+	}
+
+	return product.toBusinessProduct(), nil
+}
+
+func (r *Repository) UpdateProduct(id *string, product *product.Product) error {
+	return r.DB.Model(&Product{}).Where("id = ?", id).Updates(&Product{
+		SKU:          product.SKU,
+		Name:         product.Name,
+		CategoryName: product.CategoryName,
+		Description:  product.Description,
+		Unit:         product.Unit,
+		UpdatedAt:    product.UpdatedAt,
+	}).Error
+}
+
+func (r *Repository) DeleteProduct(id *string, deletedAt time.Time) error {
+	return r.DB.Model(&Product{}).Where("id = ?", id).Updates(&Product{Deleted: true, DeletedAt: deletedAt}).Error
 }

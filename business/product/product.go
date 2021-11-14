@@ -41,13 +41,13 @@ func (p *ProductSpec) toInsertProduct(merchatId *string) *Product {
 	}
 }
 
-// func (p *ProductSpec) toUpdateProduct() *Product {
-// 	return &Product{
-// 		SKU:          p.SKU,
-// 		Name:         p.Name,
-// 		CategoryName: p.CategoryName,
-// 		Description:  p.Description,
-// 		Unit:         p.Unit,
-// 		UpdatedAt:    time.Now(),
-// 	}
-// }
+func (p *ProductSpec) toUpdateProduct() *Product {
+	return &Product{
+		SKU:          p.SKU,
+		Name:         p.Name,
+		CategoryName: p.CategoryName,
+		Description:  p.Description,
+		Unit:         p.Unit,
+		UpdatedAt:    time.Now(),
+	}
+}

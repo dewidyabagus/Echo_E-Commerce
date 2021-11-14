@@ -1,20 +1,22 @@
 package product
 
+import "time"
+
 type Service interface {
 	// Get all product
 	FindAllProduct(requester *string) (*[]Product, error)
 
 	// Get product detail by id
-	// FindProductById(id, requester *string) (*Product, error)
+	FindProductById(id, requester *string) (*Product, error)
 
 	// Add new product
 	AddNewProduct(product *ProductSpec, addter *string) error
 
 	// Modify Information Product
-	// UpdateProduct(id *string, product *ProductSpec, modifier *string) error
+	UpdateProduct(id *string, product *ProductSpec, modifier *string) error
 
 	// Delete product
-	// DeleteProduct(id, deleter *string) error
+	DeleteProduct(id, deleter *string) error
 }
 
 type Repository interface {
@@ -22,7 +24,7 @@ type Repository interface {
 	FindAllProduct(merchant_id *string) (*[]Product, error)
 
 	// Get product detail by id
-	// FindProductById(id *string) (*Product, error)
+	FindProductById(id *string) (*Product, error)
 
 	// Get product by sku
 	FindProductBySKU(merchant_id, sku *string) (id *string, err error)
@@ -31,8 +33,8 @@ type Repository interface {
 	AddNewProduct(product *Product) error
 
 	// Modify Information Product
-	// UpdateProduct(id *string, product *Product) error
+	UpdateProduct(id *string, product *Product) error
 
 	// Delete product
-	// DeleteProduct(id *string) error
+	DeleteProduct(id *string, deletedAt time.Time) error
 }

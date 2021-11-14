@@ -45,4 +45,7 @@ func RegisterRouters(e *echo.Echo, routing *Routing) {
 	productGroup.Use(middleware.JWTMiddleware())
 	productGroup.GET("", product.FindAllProduct)
 	productGroup.POST("", product.AddNewProduct)
+	productGroup.GET("/:id", product.FindProductById)
+	productGroup.PUT("/:id", product.UpdateProduct)
+	productGroup.DELETE("/:id", product.DeleteProduct)
 }
