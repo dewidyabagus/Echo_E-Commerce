@@ -1,0 +1,10 @@
+APP_HOST=0.0.0.0
+APP_PORT=8000
+
+PG_HOST=pgsql-ecommercedb
+PG_USERNAME=youruser
+PG_PASSWORD=yourpassword
+PG_DBNAME=ecommercedb
+PG_PORT=5432
+
+JWT_SECRET_KEY=secret_key@example.com
