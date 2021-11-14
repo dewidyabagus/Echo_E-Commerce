@@ -20,6 +20,8 @@ type Service interface {
 
 	// Delete user by id
 	DeleteUser(id, deleter *string) error
+
+	GetUserByIdFromService(id *string) (map[string]interface{}, error)
 }
 
 type Repository interface {

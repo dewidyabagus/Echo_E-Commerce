@@ -58,6 +58,17 @@ func (s *service) FindUserByUserId(id, requeser *string) (*User, error) {
 	return s.repository.FindUserByUserId(id)
 }
 
+func (s *service) GetUserByIdFromService(id *string) (map[string]interface{}, error) {
+	dataUser, err := s.repository.FindUserByUserId(id)
+	if err != nil {
+		return nil, err
+	}
+
+	return map[string]interface{}{
+		"merchant_id": dataUser.MerchantID,
+	}, nil
+}
+
 func (s *service) UpdateUser(id *string, user *UserEditSpec, modifier *string) error {
 	if _, err := s.admin.GetAdminById(modifier); err != nil {
 		return business.ErrUnauthorized

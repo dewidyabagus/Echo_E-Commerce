@@ -32,14 +32,16 @@ type Outlet struct {
 
 func (u *User) toBusinessUser() *user.User {
 	return &user.User{
-		ID:        u.ID,
-		Email:     u.Email,
-		FirstName: u.FirstName,
-		LastName:  u.LastName,
-		OutletID:  u.OutletID,
-		Password:  u.Password,
-		CreatedAt: u.CreatedAt,
-		UpdatedAt: u.UpdatedAt,
+		ID:         u.ID,
+		Email:      u.Email,
+		FirstName:  u.FirstName,
+		LastName:   u.LastName,
+		OutletID:   u.OutletID,
+		MerchantID: u.Outlet.MerchantID,
+		OutletName: u.Outlet.Name,
+		Password:   u.Password,
+		CreatedAt:  u.CreatedAt,
+		UpdatedAt:  u.UpdatedAt,
 	}
 }
 
@@ -124,7 +126,7 @@ func (r *Repository) VerifyUserEmail(email *string) (id *string, err error) {
 func (r *Repository) FindAllUser() (*[]user.User, error) {
 	var users = new([]User)
 
-	err := r.DB.Where("deleted = false").Find(users).Order("outlet_id asc").Error
+	err := r.DB.Preload("Outlet").Where("deleted = false").Find(users).Order("outlet_id asc").Error
 	if err != nil {
 		return nil, err
 	}
@@ -135,7 +137,7 @@ func (r *Repository) FindAllUser() (*[]user.User, error) {
 func (r *Repository) FindUserByUserId(id *string) (*user.User, error) {
 	var user = new(User)
 
-	if err := r.DB.First(user, "deleted = false and id = ?", id).Error; err != nil {
+	if err := r.DB.Preload("Outlet").First(user, "deleted = false and id = ?", id).Error; err != nil {
 		return nil, err
 	}
 

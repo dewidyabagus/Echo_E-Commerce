@@ -9,14 +9,16 @@ import (
 )
 
 type User struct {
-	ID        string
-	Email     string
-	FirstName string
-	LastName  string
-	OutletID  string
-	Password  string
-	CreatedAt time.Time
-	UpdatedAt time.Time
+	ID         string
+	Email      string
+	FirstName  string
+	LastName   string
+	OutletID   string
+	MerchantID string
+	OutletName string
+	Password   string
+	CreatedAt  time.Time
+	UpdatedAt  time.Time
 }
 
 type UserAddSpec struct {
