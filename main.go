@@ -101,5 +101,5 @@ func main() {
 	})
 
 	// start echo
-	e.Start(":8000")
+	e.Start(fmt.Sprintf("%s:%d", config.AppHost, config.AppPort))
 }
