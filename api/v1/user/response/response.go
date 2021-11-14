@@ -10,7 +10,7 @@ type UserDetail struct {
 	Email     string    `json:"email"`
 	FirstName string    `json:"first_name"`
 	LastName  string    `json:"last_name"`
-	OutletId  string    `json:"outlet_id"`
+	OutletID  string    `json:"outlet_id"`
 	UpdatedAt time.Time `json:"updated_at"`
 }
 
@@ -20,7 +20,7 @@ func GetUserResponseDetail(user *user.User) *UserDetail {
 		Email:     user.Email,
 		FirstName: user.FirstName,
 		LastName:  user.LastName,
-		OutletId:  user.OutletId,
+		OutletID:  user.OutletID,
 		UpdatedAt: user.UpdatedAt,
 	}
 }

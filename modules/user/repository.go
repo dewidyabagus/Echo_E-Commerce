@@ -11,16 +11,23 @@ import (
 )
 
 type User struct {
-	ID        string    `gorm:"id;type:uuid;primaryKey;index:users_id_idx"`
-	Email     string    `gorm:"email;type:varchar(100);index:users_email_idx;not null"`
-	FirstName string    `gorm:"first_name;type:varchar(100);not null"`
-	LastName  string    `gorm:"last_name;type:varchar(100);not null"`
-	Password  string    `gorm:"password;type:varchar(32);not null"`
-	OutletId  string    `gorm:"outlet_id;type:uuid;index:users_outlet_id_idx;not null"`
+	ID        string `gorm:"id;type:uuid;primaryKey;index:users_id_idx"`
+	Email     string `gorm:"email;type:varchar(100);index:users_email_idx;not null"`
+	FirstName string `gorm:"first_name;type:varchar(100);not null"`
+	LastName  string `gorm:"last_name;type:varchar(100);not null"`
+	Password  string `gorm:"password;type:varchar(32);not null"`
+	OutletID  string `gorm:"outlet_id;type:uuid;index:users_outlet_id_idx;not null"`
+	Outlet    Outlet
 	CreatedAt time.Time `gorm:"created_at;type:timestamp;not null"`
 	UpdatedAt time.Time `gorm:"updated_at;type:timestamp;not null"`
 	Deleted   bool      `gorm:"deleted;type:boolean;default:false"`
 	DeletedAt time.Time `gorm:"deleted_at;type:timestamp"`
+}
+
+type Outlet struct {
+	ID         string `gorm:"id;type:uuid;primaryKey"`
+	MerchantID string `gorm:"merchant_id;type:uuid;index:outlets_merchant_id_idx;not null"`
+	Name       string `gorm:"name;type:varchar(100);index:outlets_name_idx;not null"`
 }
 
 func (u *User) toBusinessUser() *user.User {
@@ -29,7 +36,7 @@ func (u *User) toBusinessUser() *user.User {
 		Email:     u.Email,
 		FirstName: u.FirstName,
 		LastName:  u.LastName,
-		OutletId:  u.OutletId,
+		OutletID:  u.OutletID,
 		Password:  u.Password,
 		CreatedAt: u.CreatedAt,
 		UpdatedAt: u.UpdatedAt,
@@ -51,7 +58,7 @@ func toUserInsert(u *user.User) *User {
 		FirstName: u.FirstName,
 		LastName:  u.LastName,
 		Password:  u.Password,
-		OutletId:  u.OutletId,
+		OutletID:  u.OutletID,
 		CreatedAt: u.CreatedAt,
 		UpdatedAt: u.UpdatedAt,
 	}
@@ -63,7 +70,7 @@ func toUpdateUser(u *user.User) *User {
 		FirstName: u.FirstName,
 		LastName:  u.LastName,
 		Password:  u.Password,
-		OutletId:  u.OutletId,
+		OutletID:  u.OutletID,
 		UpdatedAt: u.UpdatedAt,
 	}
 }

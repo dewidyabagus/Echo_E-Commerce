@@ -6,7 +6,7 @@ type RequestUser struct {
 	Email     string `json:"email"`
 	FirstName string `json:"first_name"`
 	LastName  string `json:"last_name"`
-	OutletId  string `json:"outlet_id"`
+	OutletID  string `json:"outlet_id"`
 	Password  string `json:"password"`
 }
 
@@ -15,7 +15,7 @@ func (r *RequestUser) ToUserAddSpec() *user.UserAddSpec {
 		Email:     r.Email,
 		FirstName: r.FirstName,
 		LastName:  r.LastName,
-		OutletId:  r.OutletId,
+		OutletID:  r.OutletID,
 		Password:  r.Password,
 	}
 }
@@ -25,6 +25,6 @@ func (r *RequestUser) ToUserUpateSpec() *user.UserEditSpec {
 		Email:     r.Email,
 		FirstName: r.FirstName,
 		LastName:  r.LastName,
-		OutletId:  r.OutletId,
+		OutletID:  r.OutletID,
 	}
 }
