@@ -1,0 +1,551 @@
+{
+	"info": {
+		"_postman_id": "ce9a1694-fc3e-4f16-8497-b7da8abd3601",
+		"name": "RESTful E-Commerce",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "API Auth",
+			"item": [
+				{
+					"name": "Login User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"dyan@example.com\",\n    \"password\": \"qwerty\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/auth/users",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"auth",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login Admin",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"admin@example.com\",\n    \"password\": \"qwerty\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/auth/admins",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"auth",
+								"admins"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "API Admin",
+			"item": [
+				{
+					"name": "Admin",
+					"item": [
+						{
+							"name": "Register Admin",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"admin@example.com\",\n    \"first_name\": \"Widya Ade\",\n    \"last_name\": \"Bagus\",\n    \"password\": \"qwerty\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/v1/admins/register",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"v1",
+										"admins",
+										"register"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "User",
+					"item": [
+						{
+							"name": "Register User",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"dyan@example.com\",\n    \"first_name\": \"Dyan Agustin\",\n    \"last_name\": \"Permatasari\",\n    \"outlet_id\": \"a81bc81b-dead-4e5d-abff-90865d1e13b2\",\n    \"password\": \"qwerty\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/v1/users/register",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"v1",
+										"users",
+										"register"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "User Toko Baju 5000",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"email\": \"widya@example.com\",\n    \"first_name\": \"Widya Ade\",\n    \"last_name\": \"Bagus\",\n    \"outlet_id\": \"a81bc81b-dead-4e5d-abff-90865d1e13b1\",\n    \"password\": \"123456\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{base_url}}/v1/users/register",
+											"host": [
+												"{{base_url}}"
+											],
+											"path": [
+												"v1",
+												"users",
+												"register"
+											]
+										}
+									},
+									"_postman_previewlanguage": null,
+									"header": null,
+									"cookie": [],
+									"body": null
+								},
+								{
+									"name": "User Toko Elektronik Joka",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"email\": \"dyan@example.com\",\n    \"first_name\": \"Dyan Agustin\",\n    \"last_name\": \"Permatasari\",\n    \"outlet_id\": \"a81bc81b-dead-4e5d-abff-90865d1e13b2\",\n    \"password\": \"qwerty\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{base_url}}/v1/users/register",
+											"host": [
+												"{{base_url}}"
+											],
+											"path": [
+												"v1",
+												"users",
+												"register"
+											]
+										}
+									},
+									"_postman_previewlanguage": null,
+									"header": null,
+									"cookie": [],
+									"body": null
+								}
+							]
+						},
+						{
+							"name": "Find All User",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/v1/users",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"v1",
+										"users"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Find User By Id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/v1/users/602a1150-fef6-45b2-a204-22c53a22389a",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"v1",
+										"users",
+										"602a1150-fef6-45b2-a204-22c53a22389a"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Modify Data User",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"hendro@example.com\",\n    \"first_name\": \"Widya Ade Edited\",\n    \"last_name\": \"Bagus Edited\",\n    \"outlet_id\": \"a81bc81b-dead-4e5d-abff-90865d1e13b1\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/v1/users/602a1150-fef6-45b2-a204-22c53a22389a",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"v1",
+										"users",
+										"602a1150-fef6-45b2-a204-22c53a22389a"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete User",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/v1/users/602a1150-fef6-45b2-a204-22c53a22389a",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"v1",
+										"users",
+										"602a1150-fef6-45b2-a204-22c53a22389a"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"auth": {
+						"type": "bearer",
+						"bearer": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MzY4NjgzOTQsImlkIjoiZjQ4MzdkN2MtMGM0MS00MzkzLWFiYzUtYjcyZWE4Njk1NDFlIn0.qYdzEbD-s3Ov7BAhA-4qtMDdhj6l8-3UZ8Pdwwpt-HA",
+								"type": "string"
+							}
+						]
+					},
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "API Product",
+			"item": [
+				{
+					"name": "Find All Product",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/v1/products",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Find Data Product By Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/v1/products/2316c57e-756f-44a6-afd0-7935ebc7a1d7",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"products",
+								"2316c57e-756f-44a6-afd0-7935ebc7a1d7"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add New Product",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"sku\": \"BLM-0001-00002\",\n    \"name\": \"MIE INSTAN RASA AYAM BAWANG\",\n    \"category_name\": \"MIE INSTAN\",\n    \"description\": \"Mie Instan Yang Enak Mantap\",\n    \"unit\": \"pcs\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/products",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"products"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Product 1",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"sku\": \"BLM-0001-00001\",\n    \"name\": \"MIE INSTAN RASA SOTO\",\n    \"category_name\": \"MIE INSTAN\",\n    \"description\": \"Mie Instan Yang Enak\",\n    \"unit\": \"pcs\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/v1/products",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"v1",
+										"products"
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": null
+						},
+						{
+							"name": "Product 2",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"sku\": \"BLM-0001-00001\",\n    \"name\": \"MIE INSTAN RASA SOTO\",\n    \"category_name\": \"MIE INSTAN\",\n    \"description\": \"Mie Instan Yang Enak\",\n    \"unit\": \"pcs\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/v1/products",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"v1",
+										"products"
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": null
+						}
+					]
+				},
+				{
+					"name": "Modify Data Product",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"sku\": \"BLM-0001-00003\",\n    \"name\": \"MIE INSTAN RASA AYAM BAWANG EDIT\",\n    \"category_name\": \"MIE INSTAN EDIT\",\n    \"description\": \"Mie Instan Yang Enak Mantap EDIT\",\n    \"unit\": \"pcs EDIT\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/products/2316c57e-756f-44a6-afd0-7935ebc7a1d7",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"products",
+								"2316c57e-756f-44a6-afd0-7935ebc7a1d7"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Data Product",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/v1/products/2316c57e-756f-44a6-afd0-7935ebc7a1d7",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"products",
+								"2316c57e-756f-44a6-afd0-7935ebc7a1d7"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MzY4NzkxNTAsImlkIjoiNDMwNmE4NjUtYzc0NC00MjljLWEzMDAtNWZiOThiNThlYWNmIn0.uZSvpwzJj6zU48p_b-wsjJvw_SOJGfNDi2FA3G3LwXU",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": ""
+		}
+	]
+}
