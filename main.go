@@ -29,6 +29,11 @@ import (
 	// Auth
 	authController "RESTful/api/v1/auth"
 	authService "RESTful/business/auth"
+
+	// Product
+	productController "RESTful/api/v1/product"
+	productService "RESTful/business/product"
+	productRepository "RESTful/modules/product"
 )
 
 func newDatabaseConnection(config *config.AppConfig) *gorm.DB {
@@ -76,14 +81,23 @@ func main() {
 	// Initiate auth controller
 	authCtr := authController.NewController(authSvc)
 
+	// ========= PRODUCT ========= //
+	// Initiate product repository
+	productRepo := productRepository.NewRepository(dbConnection)
+	// Initiate product service
+	productSvc := productService.NewService(productRepo, userSvc)
+	// Initiate product controller
+	producCtr := productController.NewController(productSvc)
+
 	// Initiate echo web framework
 	e := echo.New()
 
 	// Initiate routes && userCtr, authCtr, adminCtr
 	api.RegisterRouters(e, &api.Routing{
-		User:  userCtr,
-		Auth:  authCtr,
-		Admin: adminCtr,
+		User:    userCtr,
+		Auth:    authCtr,
+		Admin:   adminCtr,
+		Product: producCtr,
 	})
 
 	// start echo
